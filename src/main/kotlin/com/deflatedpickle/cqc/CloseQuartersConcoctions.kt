@@ -3,17 +3,12 @@
 package com.deflatedpickle.cqc
 
 import net.fabricmc.api.ModInitializer
-import net.minecraft.block.Blocks
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.PotionItem
 import net.minecraft.item.ThrowablePotionItem
-import net.minecraft.potion.PotionUtil
 import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
 import net.minecraft.util.ActionResult
 
 @Suppress("UNUSED")
@@ -29,23 +24,23 @@ object CloseQuartersConcoctions : ModInitializer {
     }
 
     fun useOnEntity(
-        potion: PotionItem,
         user: PlayerEntity,
         entity: LivingEntity,
-        stack: ItemStack
+        stack: ItemStack,
+        kind: Kind,
     ): ActionResult {
-        if (potion is ThrowablePotionItem) return ActionResult.FAIL
+        if (stack.item is ThrowablePotionItem) return ActionResult.PASS
 
         val world = user.world
 
         world.playSound(
             user, entity.blockPos,
-            SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS,
+            kind.sound, SoundCategory.BLOCKS,
             1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f
         )
 
         world.addBlockBreakParticles(
-            entity.blockPos, Blocks.GLASS.defaultState
+            entity.blockPos, kind.block.defaultState
         )
 
         if (!world.isClient) {
@@ -56,19 +51,7 @@ object CloseQuartersConcoctions : ModInitializer {
             entity.damage(DamageSource.player(user), 2f)
             entity.damageHelmet(DamageSource.player(user), 1f)
 
-            for (i in PotionUtil.getPotionEffects(stack)) {
-                if (i.effectType.isInstant) {
-                    i.effectType.applyInstantEffect(
-                        user,
-                        user,
-                        entity,
-                        i.amplifier,
-                        1.0
-                    )
-                } else {
-                    entity.addStatusEffect(StatusEffectInstance(i))
-                }
-            }
+            stack.finishUsing(world, entity)
         }
 
         return ActionResult.success(world.isClient)
