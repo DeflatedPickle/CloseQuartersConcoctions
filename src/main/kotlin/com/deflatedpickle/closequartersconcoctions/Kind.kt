@@ -1,6 +1,6 @@
-/* Copyright (c) 2021 DeflatedPickle under the MIT license */
+/* Copyright (c) 2021-2022 DeflatedPickle under the MIT license */
 
-package com.deflatedpickle.cqc
+package com.deflatedpickle.closequartersconcoctions
 
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks

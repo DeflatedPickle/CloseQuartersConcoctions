@@ -1,8 +1,7 @@
-/* Copyright (c) 2021 DeflatedPickle under the MIT license */
+/* Copyright (c) 2021-2022 DeflatedPickle under the MIT license */
 
-package com.deflatedpickle.cqc
+package com.deflatedpickle.closequartersconcoctions
 
-import net.fabricmc.api.ModInitializer
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
@@ -10,6 +9,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.ThrowablePotionItem
 import net.minecraft.sound.SoundCategory
 import net.minecraft.util.ActionResult
+import org.quiltmc.loader.api.ModContainer
+import org.quiltmc.qsl.base.api.entrypoint.ModInitializer
 
 @Suppress("UNUSED")
 object CloseQuartersConcoctions : ModInitializer {
@@ -19,7 +20,7 @@ object CloseQuartersConcoctions : ModInitializer {
     private const val AUTHOR = "$[author]"
     private const val VERSION = "$[version]"
 
-    override fun onInitialize() {
+    override fun onInitialize(mod: ModContainer) {
         println(listOf(MOD_ID, NAME, GROUP, AUTHOR, VERSION))
     }
 
